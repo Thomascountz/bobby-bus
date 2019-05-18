@@ -1,4 +1,4 @@
-#search-box {
+.search-box {
   width: 100%;
   margin: 8px 0;
   padding: 1px 0;
@@ -9,16 +9,16 @@
   box-shadow: none;
 }
 
-#search-button {
-  width: 50%;
+.search-button {
+  width: 100%;
   font-size: 2em;
   margin: 15px 0;
   border: 2px solid #998fc7;
-  color: #998fc7;
+  background-color: #998fc7;
   border-radius: 25px;
-  background-color: transparent;
+  color: #f2f5f7;
   &:hover {
-    background-color: #998fc7;
-    color: #ececec;
+    background-color: #f2f5f7;
+    color: #998fc7;
   }
 }

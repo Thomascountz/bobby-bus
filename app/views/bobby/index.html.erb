@@ -1,11 +1,11 @@
 <div class="col-8">
-  <H2>bobby.</H2>
+  <h2>bobby. <span class="font-light">v0.0.1</span></h2>
   <div>
     <% instructions = "At bus stops, look for the green 'MTA Bus Time' signs on pole boxes to find your 6-digit bus stop code." %>
     <%= form_tag(bobby_search_path, :method => "get") do %>
       <%= label_tag(:stop_id, instructions, class: "font-light") %>
-      <%= text_field_tag(:stop_id, "", id: "search-box", type: "number", pattern: "[0-9]*") %>
-      <%= submit_tag("submit.", id: "search-button") %>
+      <%= text_field_tag(:stop_id, "", class: "search-box", type: "number", pattern: "[0-9]*") %>
+      <%= button_tag("take the bus.", class: "search-button") %>
     <% end %>
   </div>
 </div>
