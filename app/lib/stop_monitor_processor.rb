@@ -7,12 +7,15 @@ require_relative './stop_visit'
 class StopMonitorProcessor
   class << self
     def process(json:)
-      parsed_json = ActiveSupport::JSON.decode(json)
+      begin
+        parsed_json = ActiveSupport::JSON.decode(json)
+      rescue JSON::ParserError
+        return StopMonitor.new
+      end
+
       monitored_stop_visits = parsed_json.dig('Siri', 'ServiceDelivery', 'StopMonitoringDelivery', 0, 'MonitoredStopVisit')
 
-      if monitored_stop_visits == nil
-        return StopMonitor.new()
-      end
+      return StopMonitor.new if monitored_stop_visits.nil?
 
       stop_name = monitored_stop_visits.dig(0, 'MonitoredVehicleJourney', 'MonitoredCall', 'StopPointName', 0)
       stop_visits = monitored_stop_visits.map do |stop_visit|
