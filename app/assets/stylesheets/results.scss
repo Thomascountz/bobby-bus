@@ -1,0 +1,17 @@
+.stop-name {
+  margin: 0;
+}
+.route {
+  .route-name {
+    text-align: right;
+  }
+  .arrival {
+    border-bottom: 1px solid #c9c3e6;
+    padding: 20px 0;
+    margin: 5px 0;
+    font-size: 1.3em;
+  }
+  .distance {
+    margin-left: 10px;
+  }
+}
