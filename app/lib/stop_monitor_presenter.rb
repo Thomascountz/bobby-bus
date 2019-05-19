@@ -4,14 +4,14 @@ require 'active_support/inflector'
 require_relative './stop_monitor'
 
 class StopMonitorPresenter
-  attr_reader :stop_visits
+  attr_reader :stop_visits, :routes
 
   def initialize(stop_monitor:)
     @stop_monitor = stop_monitor
     if stop_monitor.stop_visits
-      @stop_visits = stop_monitor.stop_visits.map do |stop_visit|
-        StopVisitPresenter.new(stop_visit: stop_visit)
-      end
+      @routes = stop_monitor.stop_visits.map do |stop_visit|
+        Route.new(stop_visit: stop_visit)
+      end.group_by(&:line_name)
     end
   end
 
@@ -30,7 +30,7 @@ class StopMonitorPresenter
   attr_reader :stop_monitor
 end
 
-class StopVisitPresenter
+class Route
   def initialize(stop_visit:)
     @stop_visit = stop_visit
   end

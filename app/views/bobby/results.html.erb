@@ -1,41 +1,17 @@
 <div class="col-8">
   <div>
-  <h1 class="stop-name">Greenpoint & Manhattan</h1>
-    <div class="row route">
-      <h2 class="route-name"> <%= image_tag("bobby_logo.svg", size: 25) %> B32</h2>
-      <div class="row arrival">
-        <div class="distance">
-          3 mins
-        </div>
+    <h1 class="stop-name"><%= @results.stop_name %></h1>
+    <% @results.routes.each do |line_name, arrivals| %>
+      <div class="row route">
+        <h2 class="route-name"> <%= image_tag("bobby_logo.svg", size: 25) %> <%= line_name %></h2>
+        <% arrivals.each do |arrival| %>
+          <div class="row arrival">
+            <div class="distance">
+              <%= arrival.proximity_text %>
+            </div>
+          </div>
+        <% end %>
       </div>
-      <div class="row arrival">
-        <div class="distance">
-          52 mins
-        </div>
-      </div>
-      <div class="row arrival">
-        <div class="distance">
-          54 mins
-        </div>
-      </div>
-    </div>
-    <div class="row route">
-      <h2 class="route-name"> <%= image_tag("bobby_logo.svg", size: 25) %> B62</h2>
-      <div class="row arrival">
-        <div class="distance">
-          4 mins
-        </div>
-      </div>
-      <div class="row arrival">
-        <div class="distance">
-          5.9 miles
-        </div>
-      </div>
-      <div class="row arrival">
-        <div class="distance">
-          6.3 miles
-        </div>
-      </div>
-    </div>
+    <% end %>
   </div>
 </div>

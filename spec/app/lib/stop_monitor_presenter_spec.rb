@@ -32,24 +32,24 @@ RSpec.describe StopMonitorPresenter do
       ]
       stop_monitor = StopMonitor.new(stop_visits: stop_visits)
       stop_monitor_presenter = StopMonitorPresenter.new(stop_monitor: stop_monitor)
-      expect(stop_monitor_presenter.stop_visits[0].line_name).to eq('Q69')
-      expect(stop_monitor_presenter.stop_visits[1].line_name).to eq('S44')
-      expect(stop_monitor_presenter.stop_visits[2].line_name).to eq('B32')
+      expect(stop_monitor_presenter.routes.keys).to include('Q69')
+      expect(stop_monitor_presenter.routes.keys).to include('S44')
+      expect(stop_monitor_presenter.routes.keys).to include('B32')
     end
   end
 
   describe '#proximity_text' do
     it 'formats the proximity text' do
       stop_visits = [
-        StopVisit.new(proximity_text: 'approaching'),
-        StopVisit.new(proximity_text: '1.2 miles away'),
-        StopVisit.new(proximity_text: '2.3 miles away')
+        StopVisit.new(line_name: 'Q66', proximity_text: 'approaching'),
+        StopVisit.new(line_name: 'Q66', proximity_text: '1.2 miles away'),
+        StopVisit.new(line_name: 'Q66', proximity_text: '2.3 miles away')
       ]
       stop_monitor = StopMonitor.new(stop_visits: stop_visits)
       stop_monitor_presenter = StopMonitorPresenter.new(stop_monitor: stop_monitor)
-      expect(stop_monitor_presenter.stop_visits[0].proximity_text).to eq('approaching')
-      expect(stop_monitor_presenter.stop_visits[1].proximity_text).to eq('1.2 miles away')
-      expect(stop_monitor_presenter.stop_visits[2].proximity_text).to eq('2.3 miles away')
+      expect(stop_monitor_presenter.routes.dig("Q66", 0).proximity_text).to eq('approaching')
+      expect(stop_monitor_presenter.routes.dig("Q66", 1).proximity_text).to eq('1.2 miles away')
+      expect(stop_monitor_presenter.routes.dig("Q66", 2).proximity_text).to eq('2.3 miles away')
     end
   end
 end
