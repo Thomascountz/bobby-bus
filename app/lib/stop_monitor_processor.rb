@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require 'active_support'
+require_relative './date_time_refinements'
 require_relative './stop_monitor'
 require_relative './stop_visit'
 
 class StopMonitorProcessor
   class << self
+    using DateTimeRefinements
     def process(json:)
       begin
         parsed_json = ActiveSupport::JSON.decode(json)
@@ -13,9 +15,15 @@ class StopMonitorProcessor
         return StopMonitor.new
       end
 
-      monitored_stop_visits = parsed_json.dig('Siri', 'ServiceDelivery', 'StopMonitoringDelivery', 0, 'MonitoredStopVisit')
+      response_timestamp = DateTime.try_parse(parsed_json.dig('Siri', 'ServiceDelivery', 'ResponseTimestamp'))
 
-      return StopMonitor.new if monitored_stop_visits.nil?
+      monitored_stop_visits = parsed_json.dig('Siri', 'ServiceDelivery', 'StopMonitoringDelivery', 0, 'MonitoredStopVisit')
+      error_description = parsed_json.dig('Siri', 'ServiceDelivery', 'StopMonitoringDelivery', 0, 'ErrorCondition', 'Description')
+
+      if monitored_stop_visits.nil?
+        return StopMonitor.new(response_timestamp: response_timestamp,
+                               error_description: error_description)
+      end
 
       stop_code = monitored_stop_visits.dig(0, 'MonitoredVehicleJourney', 'MonitoredCall', 'StopPointRef')
       stop_name = monitored_stop_visits.dig(0, 'MonitoredVehicleJourney', 'MonitoredCall', 'StopPointName', 0)
@@ -28,9 +36,11 @@ class StopMonitorProcessor
         )
       end
 
-      StopMonitor.new(stop_code: stop_code,
+      StopMonitor.new(response_timestamp: response_timestamp,
+                      stop_code: stop_code,
                       stop_name: stop_name,
-                      stop_visits: stop_visits)
+                      stop_visits: stop_visits,
+                      error_description: error_description)
     end
   end
 end

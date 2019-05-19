@@ -3,12 +3,16 @@
 require_relative './stop_visit'
 
 class StopMonitor
-  attr_reader :stop_code, :stop_name, :stop_visits
-  def initialize(stop_code: nil,
+  attr_reader :response_timestamp, :stop_code, :stop_name, :stop_visits, :error_description
+  def initialize(response_timestamp: nil,
+                 stop_code: nil,
                  stop_name: nil,
-                 stop_visits: nil)
+                 stop_visits: nil,
+                 error_description: nil)
+    @response_timestamp = response_timestamp
     @stop_code = stop_code
     @stop_name = stop_name
     @stop_visits = stop_visits
+    @error_description = error_description
   end
 end
