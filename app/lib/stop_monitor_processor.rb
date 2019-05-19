@@ -30,7 +30,7 @@ class StopMonitorProcessor
       stop_visits = monitored_stop_visits.map do |stop_visit|
         StopVisit.new(
           line_name: stop_visit.dig('MonitoredVehicleJourney', 'PublishedLineName', 0),
-          arrival_time: DateTime.parse(stop_visit.dig('MonitoredVehicleJourney', 'MonitoredCall', 'ExpectedArrivalTime')),
+          arrival_time: DateTime.try_parse(stop_visit.dig('MonitoredVehicleJourney', 'MonitoredCall', 'ExpectedArrivalTime')),
           proximity_text: stop_visit.dig('MonitoredVehicleJourney', 'MonitoredCall', 'ArrivalProximityText'),
           no_of_stops_away: stop_visit.dig('MonitoredVehicleJourney', 'MonitoredCall', 'NumberOfStopsAway')
         )

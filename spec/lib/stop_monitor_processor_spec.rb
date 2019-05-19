@@ -35,6 +35,18 @@ RSpec.describe StopMonitorProcessor do
       expect(stop_monitor.stop_visits[1].no_of_stops_away).to eq(6)
     end
 
+    it 'maps nil if field is missing in json' do
+      json = '{ "Siri": { "ServiceDelivery": { "ResponseTimestamp": "", "StopMonitoringDelivery": [ { "MonitoredStopVisit": [ { "MonitoredVehicleJourney": { "LineRef": "", "DirectionRef": "", "FramedVehicleJourneyRef": {}, "JourneyPatternRef": "", "PublishedLineName": [], "OperatorRef": "", "OriginRef": "", "DestinationRef": "", "DestinationName": [], "SituationRef": [], "Monitored": true, "VehicleLocation": {}, "Bearing": 0, "ProgressRate": "", "BlockRef": "", "VehicleRef": "", "MonitoredCall": { "ExpectedArrivalTime": "", "ArrivalProximityText": null, "ExpectedDepartureTime": "", "DistanceFromStop": 0, "NumberOfStopsAway": null, "StopPointRef": null, "VisitNumber": 0, "StopPointName": [] } }, "RecordedAtTime": "" } ], "ResponseTimestamp": "", "ValidUntil": "" } ], "SituationExchangeDelivery": [] } } }'
+      stop_monitor = StopMonitorProcessor.process(json: json)
+      expect(stop_monitor.response_timestamp).to eq(nil)
+      expect(stop_monitor.stop_name).to eq(nil)
+      expect(stop_monitor.stop_code).to eq(nil)
+      expect(stop_monitor.stop_visits[0].line_name).to eq(nil)
+      expect(stop_monitor.stop_visits[0].arrival_time).to eq(nil)
+      expect(stop_monitor.stop_visits[0].proximity_text).to eq(nil)
+      expect(stop_monitor.stop_visits[0].no_of_stops_away).to eq(nil)
+    end
+
     it 'returns errors' do
       json = '{"Siri":{"ServiceDelivery":{"ResponseTimestamp":"2019-05-19T10:55:24.098-04:00","StopMonitoringDelivery":[{"ResponseTimestamp":"2019-05-19T10:55:24.098-04:00","ErrorCondition":{"OtherError":{"ErrorText":"No such stop: MTA NYCT_12345. No such stop: MTA_12345. No such stop: MTABC_12345."},"Description":"No such stop: MTA NYCT_12345. No such stop: MTA_12345. No such stop: MTABC_12345."}}]}}}'
       stop_monitor = StopMonitorProcessor.process(json: json)
