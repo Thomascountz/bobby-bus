@@ -17,6 +17,7 @@ class StopMonitorProcessor
 
       return StopMonitor.new if monitored_stop_visits.nil?
 
+      stop_code = monitored_stop_visits.dig(0, 'MonitoredVehicleJourney', 'MonitoredCall', 'StopPointRef')
       stop_name = monitored_stop_visits.dig(0, 'MonitoredVehicleJourney', 'MonitoredCall', 'StopPointName', 0)
       stop_visits = monitored_stop_visits.map do |stop_visit|
         StopVisit.new(
@@ -27,7 +28,8 @@ class StopMonitorProcessor
         )
       end
 
-      StopMonitor.new(stop_name: stop_name,
+      StopMonitor.new(stop_code: stop_code,
+                      stop_name: stop_name,
                       stop_visits: stop_visits)
     end
   end
